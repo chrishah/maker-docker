@@ -34,12 +34,14 @@ In detail, the image is set up with:
 
 The image can be pulled from Dockerhub (note the tag) via:
 ```bash
-docker pull chrishah/premaker-plus-docker:v26112018
+docker pull chrishah/premaker-plus:18
 ```
 
-or built within the base directory of this repo, e.g. via:
+or built in the `premaker-plus` directory of this repo, e.g. via:
 ```bash
-docker build --network=host -t chrishah/premaker-plus-docker .
+cd premaker-plus
+docker build --network=host -t chrishah/premaker-plus:18 --file .
+cd ..
 ```
 
 
@@ -60,7 +62,7 @@ wget --user your-user-name \
 
 Once you have all this you can create a Dockerfile,
 ```bash
-echo -e "FROM chrishah/premaker-plus-docker:v26112018" > Dockerfile-maker-plus
+echo -e "FROM chrishah/premaker-plus:18" > Dockerfile-maker-plus
 ```
 
 and build the functioning MAKER image:
@@ -68,9 +70,9 @@ and build the functioning MAKER image:
 docker build --network=host -t your-maker-plus --file Dockerfile-maker-plus .
 ```
 
-Or you can use the Dockerfile `dockerfiles/Dockerfile-maker-plus-onbuild` (which is exactly the above), to build the functioning MAKER image via:
+Or you can use the Dockerfile `premaker-plus/Dockerfile_maker_onbuild` (which is exactly the above), to build the functioning MAKER image via:
 ```bash
-docker build --network=host -t your-maker-plus --file dockerfiles/Dockerfile-maker-plus-onbuild .
+docker build --network=host -t your-maker-plus:version --file dockerfiles/Dockerfile-maker-plus-onbuild .
 ```
 
 The above was tested with with:
