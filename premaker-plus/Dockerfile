@@ -1,4 +1,4 @@
-FROM chrishah/repeatmasker-docker:18
+FROM chrishah/repeatmasker-maker:18
 
 MAINTAINER <christoph.hahn@uni-graz.at>
 
