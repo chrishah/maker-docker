@@ -79,3 +79,19 @@ The above was tested with with:
  - MAKER v2.31.10
  - MAKER v3.01.02-beta
  - Repbase Repeatmasker Edition 20181026
+
+Use the image like so, to e.g.:
+ - run BUSCO: 
+   - `docker run -it -v $(pwd):/in/ -w /in/ --rm your-maker-plus:version run_BUSCO.py`
+ - run RepeatModeler: 
+   - `docker run -it -v $(pwd):/in/ -w /in/ --rm your-maker-plus:version RepeatModeler`
+ - run RepeatMasker: 
+   - `docker run -it -v $(pwd):/in/ -w /in/ --rm your-maker-plus:version RepeatMasker`
+ - run SNAP (fathom): 
+   - `docker run -it -v $(pwd):/in/ -w /in/ --rm your-maker-plus:version fathom`
+ - run augustus: 
+   - `docker run -it -v $(pwd):/in/ -w /in/ --rm your-maker-plus:version augustus`
+ - run MAKER: 
+   - `docker run -it -v $(pwd):/in/ -w /in/ --rm your-maker-plus:version maker`
+
+
