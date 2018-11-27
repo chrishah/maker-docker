@@ -40,15 +40,15 @@ docker pull chrishah/premaker-plus:18
 or built in the `premaker-plus` directory of this repo, e.g. via:
 ```bash
 cd premaker-plus
-docker build --network=host -t chrishah/premaker-plus:18 --file .
+docker build --network=host -t chrishah/premaker-plus:18 --file Dockerfile .
 cd ..
 ```
 
 
-__Build the fully functioning MAKER image__
+## Build the fully functioning MAKER image
 
-You'll need two more things in your working directory:
- - A copy of the latest [Repbase-derived RepeatMasker libraries](https://www.girinst.org/server/RepBase/index.php), renamed to `repeatmaskerlibraries.tar.gz`
+You'll need two more things __in your working directory__:
+ - A copy of the latest [Repbase-derived RepeatMasker libraries](https://www.girinst.org/server/RepBase/index.php), renamed to __`repeatmaskerlibraries.tar.gz`__
    - this requires free (for academic purposes) registration
    - once registered, download the latest version, e.g. via:
 ```bash
@@ -57,7 +57,7 @@ wget --user your-user-name \
     -O repeatmaskerlibraries.tar.gz \
     https://www.girinst.org/server/RepBase/protected/repeatmaskerlibraries/RepBaseRepeatMaskerEdition-20181026.tar.gz
 ```
- - a copy of the MAKER archive (renamed to `maker.tar.gz`)
+ - a copy of the MAKER archive (renamed to __`maker.tar.gz`__)
    - this again requires free (for academic purposes) registration
 
 Once you have all this you can create a Dockerfile,
@@ -72,7 +72,7 @@ docker build --network=host -t your-maker-plus --file Dockerfile-maker-plus .
 
 Or you can use the Dockerfile `premaker-plus/Dockerfile_maker_onbuild` (which is exactly the above), to build the functioning MAKER image via:
 ```bash
-docker build --network=host -t your-maker-plus:version --file dockerfiles/Dockerfile-maker-plus-onbuild .
+docker build --network=host -t your-maker-plus:version --file premaker-plus/Dockerfile-maker-plus-onbuild .
 ```
 
 The above was tested with with:
