@@ -1,0 +1,26 @@
+#!/usr/bin/env perl
+
+#
+# Module Dependence
+#
+use strict;
+use Cwd;
+use FindBin;
+use lib $FindBin::Bin;
+use Getopt::Long;
+use LibraryUtils;
+
+
+my $rmLocation = "$FindBin::Bin";
+print "$rmLocation\n";
+my ( $combLib, $tag1, $rmLibraryVersion ) =
+    LibraryUtils::validateLibraries( "$rmLocation/Libraries", "CONSENSUS" );
+
+my ( $na, $tag2, $dfamLibraryVersion ) =
+    LibraryUtils::validateLibraries( "$rmLocation/Libraries", "HMM" );
+
+print "\n  -- Building FASTA database...";
+system(
+"$rmLocation/util/buildRMLibFromEMBL.pl $rmLocation/Libraries/RepeatMaskerLib.embl > $rmLocation/Libraries/RepeatMasker.lib 2>/dev/null"
+);
+
