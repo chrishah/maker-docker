@@ -4,24 +4,6 @@ MAINTAINER <christoph.hahn@uni-graz.at>
 
 WORKDIR /usr/src
 
-#install perl modules required for maker
-#ENV PERL_MM_USE_DEFAULT=1
-#RUN cpan DBI && \
-#	cpan DBD::SQLite && \
-#	cpan forks && \
-#	cpan forks::shared && \
-#	cpan File::Which && \
-#	cpan Perl::Unsafe::Signals && \
-#	cpan Bit::Vector && \
-#	cpan Inline::C && \
-#	cpan IO::All && \
-#	cpan IO::Prompt
-
-#set up minimal bioperl
-#RUN wget https://github.com/bioperl/bioperl-live/archive/release-1-7-2.tar.gz && \
-#	tar xvfz release-1-7-2.tar.gz
-#ENV PERL5LIB="/usr/src/bioperl-live-release-1-7-2"
-
 #install SNAP
 RUN git clone --recursive https://github.com/KorfLab/SNAP.git && \
 	cd SNAP && \
