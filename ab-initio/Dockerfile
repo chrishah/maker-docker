@@ -24,9 +24,10 @@ ADD to_include/scipio-1.4.zip /usr/src/
 RUN unzip scipio-1.4.zip && \
 	ln -s $(pwd)/scipio-1.4/*.pl /usr/bin && \
 	ln -s $(pwd)/scipio-1.4/scipio.1.4.1.pl /usr/bin/scipio.pl
-#fix path to augustus in autoAug.pl script
+#fix path to augustus in scripts and remove check regarding scipio.pl abort in the autoAug pipeline
 RUN sed -i 's?augpath = ".*?augpath = "/usr/bin/augustus";?' /usr/share/augustus/scripts/autoAug.pl && \
-	sed -i 's/==0 or die("Program aborted. Possibly.*/;/' /usr/share/augustus/scripts/autoAugTrain.pl
+	sed -i 's/==0 or die("Program aborted. Possibly.*/;/' /usr/share/augustus/scripts/autoAugTrain.pl && \
+	sed -i 's?aug="$AUGUSTUS_CONFIG_PATH/../src/augustus?aug="/usr/bin/augustus?' /usr/share/augustus/scripts/autoAugPred.pl
 #Download blat
 RUN rsync -aP rsync://hgdownload.soe.ucsc.edu/genome/admin/exe/linux.x86_64/blat/blat /usr/bin/
 
