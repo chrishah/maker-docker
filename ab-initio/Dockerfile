@@ -29,11 +29,27 @@ RUN git clone --recursive https://github.com/KorfLab/SNAP.git && \
 	make && \
 	cd ..
 ENV ZOE="/usr/src/SNAP/Zoe"
-ENV PATH="/usr/src/SNAP:${PATH}"
 
-# install Augustus
-RUN apt install -y augustus augustus-data augustus-doc
+# install Augustus (the version shipping with ubuntu 18 is 3.3, but had problems with this so I replace it with version 3.3.2 which can be downloaded as executable from Github)
+RUN apt install -y augustus augustus-data augustus-doc libyaml-perl rsync && \
+	wget -O /usr/bin/augustus https://github.com/Gaius-Augustus/Augustus/releases/download/3.3.2/augustus
 ENV AUGUSTUS_CONFIG_PATH /usr/share/augustus/config
+#DBI perl module is necessary for autoAug
+ENV PERL_MM_USE_DEFAULT=1
+RUN cpan DBI
+#set up scipio
+ADD to_include/scipio-1.4.zip /usr/src/
+RUN unzip scipio-1.4.zip && \
+	ln -s $(pwd)/scipio-1.4/*.pl /usr/bin && \
+	ln -s $(pwd)/scipio-1.4/scipio.1.4.1.pl /usr/bin/scipio.pl
+#fix path to augustus in autoAug.pl script
+RUN sed -i 's?augpath = ".*?augpath = "/usr/bin/augustus";?' /usr/share/augustus/scripts/autoAug.pl && \
+	sed -i 's/==0 or die("Program aborted. Possibly.*/;/' /usr/share/augustus/scripts/autoAugTrain.pl
+#Download blat
+RUN rsync -aP rsync://hgdownload.soe.ucsc.edu/genome/admin/exe/linux.x86_64/blat/blat /usr/bin/
+
+ENV PATH="/usr/src/SNAP:/usr/share/augustus/scripts:${PATH}"
+
 
 #install Repeatmasker (much of this was taken and slighly modified from robsyme/repeatmasker-onbuild)
 # Install TRF (for RepeatScout)
