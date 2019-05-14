@@ -7,5 +7,5 @@ docker build --network=host -t chrishah/premaker-plus:18 --file ./Dockerfile .
 ```
 
 ```bash
-docker build --network=host -t chrishah/maker:2.3.10 --file Dockerfile_maker_onbuild .
+docker build --network=host -t chrishah/maker-full:2.31.10 --file Dockerfile_maker_onbuild .
 ```
