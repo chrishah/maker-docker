@@ -9,7 +9,7 @@ use FindBin;
 use lib $FindBin::Bin;
 use Getopt::Long;
 use LibraryUtils;
-
+use RepeatMaskerConfig;
 
 my $rmLocation = "$FindBin::Bin";
 print "$rmLocation\n";
@@ -23,4 +23,12 @@ print "\n  -- Building FASTA database...";
 system(
 "$rmLocation/util/buildRMLibFromEMBL.pl $rmLocation/Libraries/RepeatMaskerLib.embl > $rmLocation/Libraries/RepeatMasker.lib 2>/dev/null"
 );
+
+# Freeze RM and RMPep libraries for RepeatModeler use among others
+print "\n  -- Building RMBlast frozen libraries..\n";
+system(   "$RepeatMaskerConfig::RMBLASTDB_PRGM -dbtype nucl -in "
+        . "$rmLocation/Libraries/RepeatMasker.lib > /dev/null 2>&1" );
+system(   "$RepeatMaskerConfig::RMBLASTDB_PRGM -dbtype prot -in "
+        . "$rmLocation/Libraries/RepeatPeps.lib > /dev/null 2>&1" );
+
 
