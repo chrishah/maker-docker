@@ -7,13 +7,15 @@ WORKDIR /usr/src
 #install SNAP
 RUN git clone --recursive https://github.com/KorfLab/SNAP.git && \
 	cd SNAP && \
-	git reset --soft a89d68e8346337c155b99697389144dfb5470b0f && \
+	git reset --hard a89d68e8346337c155b99697389144dfb5470b0f && \
 	make && \
 	cd ..
 ENV ZOE="/usr/src/SNAP/Zoe"
 
 # install Augustus (the version shipping with ubuntu 18 is 3.3, but had problems with this so I replace it with version 3.3.2 which can be downloaded as executable from Github)
-RUN apt install -y augustus augustus-data augustus-doc libyaml-perl rsync && \
+RUN apt install -y \
+	augustus=3.3+dfsg-2build1 augustus-data=3.3+dfsg-2build1 augustus-doc=3.3+dfsg-2build1 libyaml-perl=1.24-1 \
+	rsync && \
 	wget -O /usr/bin/augustus https://github.com/Gaius-Augustus/Augustus/releases/download/3.3.2/augustus
 ENV AUGUSTUS_CONFIG_PATH /usr/share/augustus/config
 #DBI perl module is necessary for autoAug
@@ -39,7 +41,7 @@ WORKDIR /usr/local/bin
 # and full path each time when called
 RUN git clone --recursive https://gitlab.com/ezlab/busco.git && \
 	cd busco && \
-	git reset --soft 3927d240 && \
+	git reset --hard 3927d240 && \
 	python3 setup.py install && cd .. && \
 	sed -i 's?/usr/bin/env python?/usr/bin/env python3?' /usr/local/bin/busco/scripts/generate_plot.py && \
 	sed -i 's?/usr/bin/env python?/usr/bin/env python3?' /usr/local/bin/busco/scripts/run_BUSCO.py && \
@@ -58,5 +60,15 @@ RUN echo "tzdata tzdata/Areas select Europe" > /tmp/preseed.txt; \
 	echo "tzdata tzdata/Zones/Europe select Vienna" >> /tmp/preseed.txt; \
 	debconf-set-selections /tmp/preseed.txt && \
 	apt-get update && \
-	apt-get install -y tzdata r-base && \
+	apt-get install -y tzdata r-base=3.4.4-1ubuntu1 && \
 	R --vanilla -e 'install.packages("ggplot2", repos="http://cran.wu.ac.at/")'
+
+#install perl modules required for Genemark
+RUN cpan YAML && \
+        cpan Hash::Merge && \
+        cpan Logger::Simple && \
+        cpan Parallel::ForkManager && \
+	mkdir /usr/local/Genemark
+
+#add the (at this point empty) Genemark directory to the path in anticipation
+ENV PATH="/usr/local/Genemark:${PATH}"
