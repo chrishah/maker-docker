@@ -6,7 +6,7 @@ WORKDIR /usr/src
 
 #install perl modules required for maker
 ENV PERL_MM_USE_DEFAULT=1
-RUN cpan DBD::SQLite && \
+RUN cpan ISHIGAKI/DBD-SQLite-1.64.tar.gz && \
 	cpan forks && \
 	cpan forks::shared && \
 	cpan File::Which && \
@@ -16,11 +16,24 @@ RUN cpan DBD::SQLite && \
 	cpan IO::All && \
 	cpan IO::Prompt
 
+#This is a real hack to get Bioperl 1.7.7 installed. The XML::DOM::XPath always acts up during the test
+# so I just avoid it by not doint 'make test'
+RUN wget https://cpan.metacpan.org/authors/id/M/MI/MIROD/XML-DOM-XPath-0.14.tar.gz && \
+	tar xfz XML-DOM-XPath-0.14.tar.gz && \
+	cd XML-DOM-XPath-0.14 && \
+	sed -i 's/use encoding/use/' t/test_non_ascii.t && \
+	perl Makefile.PL && \
+	make && \
+	make install && \
+	cd .. && \
+	rm -rf XML-DOM-XPath-0.14* && \
+	cpan CJFIELDS/BioPerl-1.7.7.tar.gz
+
 #set up minimal bioperl
-RUN wget https://github.com/bioperl/bioperl-live/archive/release-1-7-2.tar.gz && \
-	tar xvfz release-1-7-2.tar.gz && \
-	rm release-1-7-2.tar.gz
-ENV PERL5LIB="/usr/src/bioperl-live-release-1-7-2"
+#RUN wget https://github.com/bioperl/bioperl-live/archive/release-1-7-2.tar.gz && \
+#	tar xvfz release-1-7-2.tar.gz && \
+#	rm release-1-7-2.tar.gz
+#ENV PERL5LIB="/usr/src/bioperl-live-release-1-7-2"
 
 ONBUILD WORKDIR /usr/local/RepeatMasker
 
@@ -37,11 +50,6 @@ ONBUILD RUN echo "Checking Repbase metadata against sequence data" >&2 && \
         for m in $(cat missing); do sed -i "/$m/,/\/\//d" Libraries/RMRBMeta.embl; done && \
         rm comp1 comp2 missing && \
         perl ./rebuild
-
-#This is not necessary anymore - done within ./rebuild above
-##ONBUILD RUN cd /usr/local/bin/RepeatMasker && util/buildRMLibFromEMBL.pl Libraries/RMRBSeqs.embl > Libraries/RepeatMasker.lib \
-##		&& makeblastdb -dbtype nucl -in Libraries/RepeatMasker.lib > /dev/null 2>&1 \
-##	        && makeblastdb -dbtype prot -in Libraries/RepeatPeps.lib > /dev/null 2>&1
 
 #Building MAKER
 ONBUILD WORKDIR /usr/local

@@ -64,6 +64,7 @@ RUN cd /usr/local/RepeatMasker \
 #./rebuild contains code for rebuilding the Repbase Master library that I have extracted from the main RepeatMasker script, normally this is done when running RepeatMasker
 #for the first time, but MAKER complains, so I build it first
 ADD to_include/rebuild /usr/local/RepeatMasker
+RUN chmod a+x /usr/local/RepeatMasker/rebuild
 
 # Install RIPcal (not sure if this is actually needed for maker)
 RUN wget http://downloads.sourceforge.net/project/ripcal/RIPCAL/RIPCAL_2.0/ripcal2_install.zip \
