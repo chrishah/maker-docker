@@ -22,8 +22,14 @@ ENV AUGUSTUS_CONFIG_PATH /usr/share/augustus/config
 ENV PERL_MM_USE_DEFAULT=1
 RUN cpan DBI
 #set up scipio
-ADD to_include/scipio-1.4.zip /usr/src/
-RUN unzip scipio-1.4.zip && \
+RUN git clone https://github.com/chrishah/maker-docker.git && \
+	cd maker-docker && \
+	git reset --hard af68b54e7330b531eb9c53a5a7774c740ed08e85 && \
+	cp ab-initio/to_include/scipio-1.4.zip /usr/src/ && \
+	cd /usr/src && \
+	rm -rf maker-docker && \
+	unzip scipio-1.4.zip && \
+	rm scipio-1.4.zip && \
 	ln -s $(pwd)/scipio-1.4/*.pl /usr/bin && \
 	ln -s $(pwd)/scipio-1.4/scipio.1.4.1.pl /usr/bin/scipio.pl
 #fix path to augustus in scripts and remove check regarding scipio.pl abort in the autoAug pipeline
