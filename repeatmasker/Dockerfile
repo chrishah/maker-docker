@@ -33,9 +33,8 @@ RUN wget http://bix.ucsd.edu/repeatscout/RepeatScout-1.0.5.tar.gz && \
 RUN git clone https://github.com/chrishah/maker-docker.git && \
 	cd maker-docker && \
 	git reset --hard af68b54e7330b531eb9c53a5a7774c740ed08e85 && \
-	cp repeatmasker/to_include/rmblastn /usr/local/bin && \
-	chmod a+x /usr/local/bin/rmblastn && \
-	rm -rf /usr/local/maker-docker 
+	cp /usr/local/maker-docker/repeatmasker/to_include/rmblastn /usr/local/bin && \
+	chmod a+x /usr/local/bin/rmblastn
 
 ## Install Blast+
 ##RUN wget ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.6.0/ncbi-blast-2.6.0+-x64-linux.tar.gz && \
@@ -70,8 +69,9 @@ RUN cd /usr/local/RepeatMasker \
 
 #./rebuild contains code for rebuilding the Repbase Master library that I have extracted from the main RepeatMasker script, normally this is done when running RepeatMasker
 #for the first time, but MAKER complains, so I build it first
-ADD to_include/rebuild /usr/local/RepeatMasker
-RUN chmod a+x /usr/local/RepeatMasker/rebuild
+RUN cp /usr/local/maker-docker/repeatmasker/to_include/rebuild /usr/local/RepeatMasker/ && \
+	chmod a+x /usr/local/RepeatMasker/rebuild && \	
+        rm -rf /usr/local/maker-docker
 
 # Install RIPcal (not sure if this is actually needed for maker)
 RUN wget http://downloads.sourceforge.net/project/ripcal/RIPCAL/RIPCAL_2.0/ripcal2_install.zip \
