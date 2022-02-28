@@ -17,10 +17,13 @@ In detail, the [image](https://hub.docker.com/r/chrishah/premaker-plus/) is set 
    - exonerate 2.4.0
  - [chrishah/ab-initio](https://hub.docker.com/r/chrishah/ab-initio/)
    - Augustus 3.3
-   - [BUSCO](https://busco.ezlab.org/) 3.0.2
-   - R 3.4.4
-     - ggplot2 3.1.0
    - SNAP (2017-05-17 - git commit: a89d68e8346337c155b99697389144dfb5470b0f)
+   - perl dependencies for Genemark
+     - YAML
+     - Hash::Merge
+     - Logger::Simple
+     - Parallel::ForkManager
+     - MCE::Mutex 
  - [chrishah/repeatmasker-maker](https://hub.docker.com/r/chrishah/repeatmasker-maker/)
    - RMBlastn 2.2.28
    - trf 407b
@@ -39,20 +42,22 @@ In detail, the [image](https://hub.docker.com/r/chrishah/premaker-plus/) is set 
      - Inline::C
      - IO::All
      - IO::Prompt
+     - BioPerl
 
+## Get the image containing the setup to compile and run maker
 The image can be pulled from Dockerhub (note the tag) via:
 ```bash
-docker pull chrishah/premaker-plus:18
+docker pull chrishah/premaker-plus:18-<commit>
 ```
 
 or built in the `premaker-plus` directory of this repo, e.g. via:
 ```bash
 cd premaker-plus
-docker build --network=host -t chrishah/premaker-plus:18 --file Dockerfile .
+docker build --network=host -t chrishah/premaker-plus:18-<commit> --file Dockerfile_noonbuild .
 cd ..
 ```
 
-## Build the fully functioning MAKER image
+## Build the fully functioning MAKER image (i.e. compile MAKER and repeatmasker onbuild)
 
 You'll need two more things __in your working directory__:
  - A copy of the latest [Repbase-derived RepeatMasker libraries](https://www.girinst.org/server/RepBase/index.php), renamed to __`repeatmaskerlibraries.tar.gz`__
@@ -69,7 +74,7 @@ wget --user your-user-name \
 
 Once you have all this you can create a Dockerfile,
 ```bash
-echo -e "FROM chrishah/premaker-plus:18" > Dockerfile-maker-plus
+echo -e "FROM chrishah/premaker-plus:18-onbuild-<commit>" > Dockerfile-maker-plus
 ```
 
 and build the functioning MAKER image (__be reminded__: you'll need to have the repeatmasker library and the MAKER archive in your working directory):
