@@ -30,7 +30,12 @@ RUN wget http://bix.ucsd.edu/repeatscout/RepeatScout-1.0.5.tar.gz && \
 #    mv ncbi-rmblastn*/bin/rmblastn /usr/local/bin && \
 #    rm -rf ncbi-rmblastn*
 # The download from ftp above doesn't work any more, so I have extracted the required binary from the chrishah/repeatmasker-maker:18 image, added it to the repo and the image like below
-ADD to_include/rmblastn /usr/local/bin
+RUN git clone https://github.com/chrishah/maker-docker.git && \
+	cd maker-docker && \
+	git reset --hard af68b54e7330b531eb9c53a5a7774c740ed08e85 && \
+	cp repeatmasker/to_include/rmblastn /usr/local/bin && \
+	chmod a+x /usr/local/bin/rmblastn && \
+	rm -rf /usr/local/maker-docker 
 
 ## Install Blast+
 ##RUN wget ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.6.0/ncbi-blast-2.6.0+-x64-linux.tar.gz && \
