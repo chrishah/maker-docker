@@ -14,26 +14,8 @@ RUN cpan ISHIGAKI/DBD-SQLite-1.64.tar.gz && \
 	cpan Bit::Vector && \
 	cpan Inline::C && \
 	cpan IO::All && \
-	cpan IO::Prompt
-
-#This is a real hack to get Bioperl 1.7.7 installed. The XML::DOM::XPath always acts up during the test
-# so I just avoid it by not doint 'make test'
-RUN wget https://cpan.metacpan.org/authors/id/M/MI/MIROD/XML-DOM-XPath-0.14.tar.gz && \
-	tar xfz XML-DOM-XPath-0.14.tar.gz && \
-	cd XML-DOM-XPath-0.14 && \
-	sed -i 's/use encoding/use/' t/test_non_ascii.t && \
-	perl Makefile.PL && \
-	make && \
-	make install && \
-	cd .. && \
-	rm -rf XML-DOM-XPath-0.14* && \
-	cpan CJFIELDS/BioPerl-1.7.7.tar.gz
-
-#set up minimal bioperl
-#RUN wget https://github.com/bioperl/bioperl-live/archive/release-1-7-2.tar.gz && \
-#	tar xvfz release-1-7-2.tar.gz && \
-#	rm release-1-7-2.tar.gz
-#ENV PERL5LIB="/usr/src/bioperl-live-release-1-7-2"
+	cpan IO::Prompt && \
+	cpan BioPerl
 
 ONBUILD WORKDIR /usr/local/RepeatMasker
 
