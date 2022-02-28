@@ -24,11 +24,13 @@ RUN wget http://bix.ucsd.edu/repeatscout/RepeatScout-1.0.5.tar.gz && \
     make	
 
 # Install RMBlast (Repeatmasker expects makeblastdb and blastx in the same location as rmblastn)
-RUN wget ftp://ftp.ncbi.nlm.nih.gov/blast/executables/rmblast/2.2.28/ncbi-rmblastn-2.2.28-x64-linux.tar.gz && \
-    tar -xzvf ncbi-rmblastn* && \
-    rm ncbi-rmblastn*.tar.gz && \
-    mv ncbi-rmblastn*/bin/rmblastn /usr/local/bin && \
-    rm -rf ncbi-rmblastn*
+#RUN wget ftp://ftp.ncbi.nlm.nih.gov/blast/executables/rmblast/2.2.28/ncbi-rmblastn-2.2.28-x64-linux.tar.gz && \
+#    tar -xzvf ncbi-rmblastn* && \
+#    rm ncbi-rmblastn*.tar.gz && \
+#    mv ncbi-rmblastn*/bin/rmblastn /usr/local/bin && \
+#    rm -rf ncbi-rmblastn*
+# The download from ftp above doesn't work any more, so I have extracted the required binary from the chrishah/repeatmasker-maker:18 image, added it to the repo and the image like below
+ADD to_include/rmblastn /usr/local/bin
 
 ## Install Blast+
 ##RUN wget ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.6.0/ncbi-blast-2.6.0+-x64-linux.tar.gz && \
