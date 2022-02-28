@@ -1,4 +1,4 @@
-FROM chrishah/ab-initio:18
+FROM chrishah/ab-initio:18-cb705fa
 
 MAINTAINER <christoph.hahn@uni-graz.at>
 
